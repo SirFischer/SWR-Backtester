@@ -9,11 +9,11 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="index.css">
 </head>
-<body class="bg-gray-100 text-gray-800">
+<body class="min-h-screen">
 
     <div id="loader-overlay" class="hidden opacity-0 -z-10">
-        <div class="progress-container">
-            <p id="loader-text" class="mb-2 text-sm font-medium text-gray-700">Running simulations...</p>
+        <div class="progress-container glass-card">
+            <p id="loader-text" class="mb-4 text-sm font-medium text-gray-700">Running simulations...</p>
             <div class="progress-bar">
                 <div id="progress-bar-inner" class="progress-bar-inner"></div>
             </div>
@@ -21,107 +21,89 @@
     </div>
 
     <div class="container mx-auto p-4 md:p-8 max-w-7xl">
-        <header class="text-center mb-10">
-            <h1 class="text-4xl md:text-5xl font-bold text-gray-900">Retirement Strategy Backtester 🚀</h1>
-            <p class="text-gray-600 mt-2 text-lg">Stress-test your withdrawal strategy against all of modern market history.</p>
+        <header class="text-center mb-12">
+            <h1 class="text-5xl md:text-6xl font-bold header-gradient mb-4">
+                Retirement Strategy Backtester 🚀
+            </h1>
+            <p class="text-white/80 mt-4 text-xl max-w-3xl mx-auto leading-relaxed">
+                Stress-test your withdrawal strategy against all of modern market history with advanced visualization and analytics.
+            </p>
         </header>
 
-        <main class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+        <main class="grid grid-cols-1 xl:grid-cols-5 lg:grid-cols-3 gap-8">
             <!-- CONTROLS PANEL -->
-            <div class="lg:col-span-1 bg-white p-6 rounded-xl shadow-lg h-fit">
-                <h2 class="text-2xl font-bold mb-6 border-b pb-4">Simulation Setup</h2>
-                <div class="space-y-6" id="controls">
-                    <div>
-                        <label for="initialPortfolio" class="block text-sm font-medium text-gray-700">Initial Portfolio</label>
+            <div class="xl:col-span-2 lg:col-span-1 glass-card p-8 rounded-2xl h-fit">
+                <h2 class="text-2xl font-bold mb-8 pb-4 border-b border-gray-200">
+                    <span class="bg-gradient-to-r from-indigo-600 to-purple-600 bg-clip-text text-transparent">
+                        Simulation Setup
+                    </span>
+                </h2>
+                <div class="space-y-8" id="controls">
+                    <div class="control-group">
+                        <label for="initialPortfolio" class="block text-sm font-semibold text-gray-700 mb-3">Initial Portfolio</label>
                         <div class="flex items-center space-x-4">
                             <input type="range" id="initialPortfolio" min="1000000" max="20000000" step="100000" value="10000000" class="w-full">
                             <input type="number" id="initialPortfolioValue" step="100000" value="10000000" class="slider-number-input">
                         </div>
                     </div>
-                     <div id="withdrawal-rate-control">
-                        <label for="withdrawalRate" class="block text-sm font-medium text-gray-700">Target Withdrawal Rate (%)</label>
+                     <div id="withdrawal-rate-control" class="control-group">
+                        <label for="withdrawalRate" class="block text-sm font-semibold text-gray-700 mb-3">Target Withdrawal Rate (%)</label>
                         <div class="flex items-center space-x-4">
                             <input type="range" id="withdrawalRate" min="2" max="10" step="0.1" value="4.0" class="w-full">
                              <input type="number" id="withdrawalRateValue" step="0.1" value="4.0" class="slider-number-input">
                         </div>
                     </div>
-                    <div>
-                        <label for="retirementDuration" class="block text-sm font-medium text-gray-700">Retirement Duration (Years)</label>
+                    <div class="control-group">
+                        <label for="retirementDuration" class="block text-sm font-semibold text-gray-700 mb-3">Retirement Duration (Years)</label>
                         <div class="flex items-center space-x-4">
                             <input type="range" id="retirementDuration" min="10" max="60" step="1" value="30" class="w-full">
                             <input type="number" id="retirementDurationValue" step="1" value="30" class="slider-number-input">
                         </div>
                     </div>
-                    <div id="elasticity-control" class="hidden">
-                        <label for="elasticityFactor" class="block text-sm font-medium text-gray-700">Max Annual Change (+/- %)</label>
+                    <div id="elasticity-control" class="control-group hidden">
+                        <label for="elasticityFactor" class="block text-sm font-semibold text-gray-700 mb-3">Max Annual Change (+/- %)</label>
                         <div class="flex items-center space-x-4">
                             <input type="range" id="elasticityFactor" min="1" max="20" step="1" value="3" class="w-full">
                              <input type="number" id="elasticityFactorValue" step="1" value="3" class="slider-number-input">
                         </div>
                     </div>
-                    <div id="moving-average-control" class="hidden">
-                        <label for="movingAverageYears" class="block text-sm font-medium text-gray-700">Smoothing Period (Years)</label>
+                    <div id="moving-average-control" class="control-group hidden">
+                        <label for="movingAverageYears" class="block text-sm font-semibold text-gray-700 mb-3">Smoothing Period (Years)</label>
                         <div class="flex items-center space-x-4">
                             <input type="range" id="movingAverageYears" min="1" max="10" step="1" value="3" class="w-full">
                              <input type="number" id="movingAverageYearsValue" step="1" value="3" class="slider-number-input">
                         </div>
                     </div>
-                    <div id="work-shield-control" class="hidden">
-                        <label for="workShieldTrigger" class="block text-sm font-medium text-gray-700">Work Shield Trigger (Market Drop > X%)</label>
+                    <div id="work-shield-control" class="control-group hidden">
+                        <label for="workShieldTrigger" class="block text-sm font-semibold text-gray-700 mb-3">Work Shield Trigger (Market Drop > X%)</label>
                         <div class="flex items-center space-x-4">
                             <input type="range" id="workShieldTrigger" min="10" max="40" step="1" value="20" class="w-full">
                              <input type="number" id="workShieldTriggerValue" step="1" value="20" class="slider-number-input">
                         </div>
                     </div>
-                    <div>
-                        <label class="block text-sm font-medium text-gray-700">Withdrawal Strategy</label>
-                        <div class="mt-2 space-y-2" id="strategy-options">
-                             <div class="flex items-center">
-                                <input id="strategy-work-shield" name="strategy" type="radio" value="work_shield" checked class="h-4 w-4 text-indigo-600 border-gray-300 focus:ring-indigo-500">
-                                <label for="strategy-work-shield" class="ml-3 block text-sm font-medium text-gray-700 tooltip-label" title="Combines the Elastic Band strategy with a safety rule. If the market drops by more than the 'Trigger %', all withdrawals are paused and a simulated work income is added until the portfolio's real value recovers to its previous peak.">Work Shield Hybrid 💪</label>
-                            </div>
-                            <div class="flex items-center">
-                                <input id="strategy-elastic" name="strategy" type="radio" value="elastic_band" class="h-4 w-4 text-indigo-600 border-gray-300 focus:ring-indigo-500">
-                                <label for="strategy-elastic" class="ml-3 block text-sm font-medium text-gray-700 tooltip-label" title="A flexible strategy. Your withdrawal is always trying to return to the 'Target %' of your current portfolio, but it's not allowed to change by more than the 'Max Annual Change %' in a single year. Provides a very smooth income.">Elastic Band 👑</label>
-                            </div>
-                            <div class="flex items-center">
-                                <input id="strategy-ma" name="strategy" type="radio" value="moving_average" class="h-4 w-4 text-indigo-600 border-gray-300 focus:ring-indigo-500">
-                                <label for="strategy-ma" class="ml-3 block text-sm font-medium text-gray-700 tooltip-label" title="Calculates your withdrawal based on the average portfolio value over the last 'X' years (set by the slider). This creates an extremely stable income stream that is less reactive to short-term market swings.">Moving Average 🌊</label>
-                            </div>
-                            <div class="flex items-center">
-                                <input id="strategy-variable" name="strategy" type="radio" value="variable_percentage" class="h-4 w-4 text-indigo-600 border-gray-300 focus:ring-indigo-500">
-                                <label for="strategy-variable" class="ml-3 block text-sm font-medium text-gray-700 tooltip-label" title="A simple, proactive rule. Withdraws 3% after a negative market year, 4% after a modest year (0-10% return), and 5% after a great year (>10% return). Directly ties spending to recent market performance.">Market-Aware 3-4-5%</label>
-                            </div>
-                            <div class="flex items-center">
-                                <input id="strategy-gk" name="strategy" type="radio" value="guyton_klinger" class="h-4 w-4 text-indigo-600 border-gray-300 focus:ring-indigo-500">
-                                <label for="strategy-gk" class="ml-3 block text-sm font-medium text-gray-700 tooltip-label" title="An academic strategy with guardrails. Your spending gets an inflation adjustment each year, a 10% cut if your withdrawal rate gets too high, and a 10% bonus raise if the rate gets very low.">Guyton-Klinger</label>
-                            </div>
-                            <div class="flex items-center">
-                                <input id="strategy-4p" name="strategy" type="radio" value="4_percent_rule" class="h-4 w-4 text-indigo-600 border-gray-300 focus:ring-indigo-500">
-                                <label for="strategy-4p" class="ml-3 block text-sm font-medium text-gray-700 tooltip-label" title="The original. You withdraw your initial amount in Year 1, and then adjust that same amount for inflation every year after, regardless of market performance. Very predictable income.">Classic 4% Rule</label>
-                            </div>
-                            <div class="flex items-center">
-                                <input id="strategy-fp" name="strategy" type="radio" value="fixed_percentage" class="h-4 w-4 text-indigo-600 border-gray-300 focus:ring-indigo-500">
-                                <label for="strategy-fp" class="ml-3 block text-sm font-medium text-gray-700 tooltip-label" title="The simplest rule. You withdraw a fixed percentage of your current portfolio value each year. Your income is directly tied to market performance, leading to high volatility.">Fixed Percentage</label>
-                            </div>
+                    <div class="control-group">
+                        <label class="block text-sm font-semibold text-gray-700 mb-4">Withdrawal Strategy</label>
+                        <div class="space-y-3" id="strategy-options">
                         </div>
                     </div>
                 </div>
             </div>
 
             <!-- RESULTS PANEL -->
-            <div class="lg:col-span-2 space-y-8">
-                <div id="results-summary" class="bg-white p-6 rounded-xl shadow-lg hidden">
+            <div class="xl:col-span-3 lg:col-span-2 space-y-8">
+                <div id="results-summary" class="results-card glass-card p-8 rounded-2xl hidden">
                 </div>
-                <div class="bg-white p-6 rounded-xl shadow-lg">
-                    <h3 class="text-xl font-bold mb-4">Portfolio Trajectories (All Historical Periods)</h3>
-                    <div id="portfolio-chart" class="w-full h-96"></div>
+                <div class="results-card glass-card p-8 rounded-2xl">
+                    <h3 class="text-2xl font-bold mb-6 bg-gradient-to-r from-indigo-600 to-purple-600 bg-clip-text text-transparent">
+                        Portfolio Trajectories (All Historical Periods)
+                    </h3>
+                    <div id="portfolio-chart" class="w-full h-96 bg-gradient-to-br from-gray-50 to-white rounded-xl"></div>
                 </div>
-                 <div id="failure-analysis" class="bg-white p-6 rounded-xl shadow-lg hidden">
-                    <h3 class="text-xl font-bold mb-4 text-red-600">Failure Analysis</h3>
-                    <p class="text-gray-600">A period fails if the portfolio runs out of money OR its inflation-adjusted value at the end of the period is less than the starting value.</p>
-                    <p class="text-gray-600 mt-2">The following retirement start years would have resulted in portfolio failure:</p>
-                    <div id="failure-years" class="mt-4 font-mono text-red-500 text-lg"></div>
+                 <div id="failure-analysis" class="results-card glass-card p-8 rounded-2xl hidden">
+                    <h3 class="text-2xl font-bold mb-6 text-red-600">Failure Analysis</h3>
+                    <p class="text-gray-600 leading-relaxed">A period fails if the portfolio runs out of money OR its inflation-adjusted value at the end of the period is less than the starting value.</p>
+                    <p class="text-gray-600 mt-3 leading-relaxed">The following retirement start years would have resulted in portfolio failure:</p>
+                    <div id="failure-years" class="mt-6 p-4 bg-red-50 rounded-lg font-mono text-red-600 text-lg border border-red-200"></div>
                 </div>
             </div>
         </main>
