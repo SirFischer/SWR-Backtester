@@ -2,12 +2,16 @@ import { updateControlVisibility } from './dom-utils.js';
 
 // Setup all form controls and event listeners
 export function setupControls() {
+    setupSliderWithNumberInput('stockAllocation', 'stockAllocationValue');
     setupSliderWithNumberInput('initialPortfolio', 'initialPortfolioValue');
     setupSliderWithNumberInput('withdrawalRate', 'withdrawalRateValue');
     setupSliderWithNumberInput('retirementDuration', 'retirementDurationValue');
     setupSliderWithNumberInput('elasticityFactor', 'elasticityFactorValue');
     setupSliderWithNumberInput('movingAverageYears', 'movingAverageYearsValue');
     setupSliderWithNumberInput('workShieldTrigger', 'workShieldTriggerValue');
+
+    // Setup stock allocation display update
+    setupStockAllocationDisplay();
 
     // Create enhanced strategy cards
     createStrategyCards();
@@ -184,6 +188,25 @@ function updateFailureCriteriaSelection(selectedCriteria) {
             card.classList.remove('selected');
         }
     });
+}
+
+// Setup stock allocation display updates
+function setupStockAllocationDisplay() {
+    const slider = document.getElementById('stockAllocation');
+    const numberInput = document.getElementById('stockAllocationValue');
+    const display = document.getElementById('allocation-display');
+    
+    const updateDisplay = () => {
+        const stockPercent = parseInt(slider.value);
+        const bondPercent = 100 - stockPercent;
+        display.textContent = `${stockPercent}% Stocks, ${bondPercent}% Bonds`;
+    };
+    
+    slider.addEventListener('input', updateDisplay);
+    numberInput.addEventListener('input', updateDisplay);
+    
+    // Initialize display
+    updateDisplay();
 }
 
 // Helper function to setup slider with bidirectional number input synchronization

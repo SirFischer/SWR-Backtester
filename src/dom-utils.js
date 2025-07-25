@@ -48,6 +48,7 @@ export function getSimulationParams() {
     const checkedStrategy = document.querySelector('input[name="strategy"]:checked');
     const checkedFailureCriteria = document.querySelector('input[name="failureCriteria"]:checked');
     return {
+        stockAllocation: parseInt(document.getElementById('stockAllocation').value),
         initialPortfolio: parseInt(document.getElementById('initialPortfolio').value),
         initialWithdrawalRate: parseFloat(document.getElementById('withdrawalRate').value) / 100,
         retirementYears: parseInt(document.getElementById('retirementDuration').value),

@@ -16,12 +16,17 @@ export function runSingleSimulation(params, startYear) {
         const yearData = HISTORICAL_DATA[year];
         if (!yearData) return { history: history, success: false, startYear: startYear, minRealPortfolio: minRealPortfolio };
 
+        // Calculate blended portfolio return based on stock/bond allocation
+        const stockAllocation = params.stockAllocation / 100;
+        const bondAllocation = 1 - stockAllocation;
+        const portfolioReturn = (yearData.market_return * stockAllocation) + (yearData.bond_return * bondAllocation);
+
         let currentWithdrawal = 0;
         
         // Work Shield Logic is a wrapper around Elastic Band
         if (params.strategy === 'work_shield') {
             const realPortfolio = portfolio / cumulativeInflation;
-            if (!isWorkShieldActive && yearData.market_return < -params.workShieldTrigger) {
+            if (!isWorkShieldActive && portfolioReturn < -params.workShieldTrigger / 100) {
                 isWorkShieldActive = true;
             }
             if (isWorkShieldActive && realPortfolio >= peakRealPortfolio) {
@@ -34,8 +39,8 @@ export function runSingleSimulation(params, startYear) {
             } else {
                 // Default to Elastic Band when not in shield mode
                 const targetWithdrawal = portfolio * params.initialWithdrawalRate;
-                const upperBound = lastWithdrawal * (1 + params.elasticityFactor);
-                const lowerBound = lastWithdrawal * (1 - params.elasticityFactor);
+                const upperBound = lastWithdrawal * (1 + params.elasticityFactor / 100);
+                const lowerBound = lastWithdrawal * (1 - params.elasticityFactor / 100);
                 currentWithdrawal = Math.max(lowerBound, Math.min(targetWithdrawal, upperBound));
             }
         } else {
@@ -51,7 +56,7 @@ export function runSingleSimulation(params, startYear) {
             return { history: history, success: false, startYear: startYear, minRealPortfolio: 0 };
         }
 
-        portfolio *= (1 + yearData.market_return);
+        portfolio *= (1 + portfolioReturn);
         lastWithdrawal = currentWithdrawal;
         
         history.push({ year, portfolio });
@@ -96,13 +101,19 @@ function calculateWithdrawal(params, portfolio, lastWithdrawal, year, yearData, 
             
         case 'elastic_band':
             const targetWithdrawal = portfolio * params.initialWithdrawalRate;
-            const upperBound = lastWithdrawal * (1 + params.elasticityFactor);
-            const lowerBound = lastWithdrawal * (1 - params.elasticityFactor);
+            const upperBound = lastWithdrawal * (1 + params.elasticityFactor / 100);
+            const lowerBound = lastWithdrawal * (1 - params.elasticityFactor / 100);
             return Math.max(lowerBound, Math.min(targetWithdrawal, upperBound));
             
         case 'variable_percentage':
             const prevYear = year - 1;
-            const prevYearReturn = HISTORICAL_DATA[prevYear] ? HISTORICAL_DATA[prevYear].market_return : 0;
+            const prevYearData = HISTORICAL_DATA[prevYear];
+            let prevYearReturn = 0;
+            if (prevYearData) {
+                const stockAllocation = params.stockAllocation / 100;
+                const bondAllocation = 1 - stockAllocation;
+                prevYearReturn = (prevYearData.market_return * stockAllocation) + (prevYearData.bond_return * bondAllocation);
+            }
             let rate = 0.04;
             if (prevYearReturn < 0) rate = 0.03;
             if (prevYearReturn > 0.10) rate = 0.05;
