@@ -46,6 +46,7 @@ export function updateControlVisibility(selectedStrategy) {
 // Get current simulation parameters from form inputs
 export function getSimulationParams() {
     const checkedStrategy = document.querySelector('input[name="strategy"]:checked');
+    const checkedFailureCriteria = document.querySelector('input[name="failureCriteria"]:checked');
     return {
         initialPortfolio: parseInt(document.getElementById('initialPortfolio').value),
         initialWithdrawalRate: parseFloat(document.getElementById('withdrawalRate').value) / 100,
@@ -53,6 +54,7 @@ export function getSimulationParams() {
         strategy: checkedStrategy ? checkedStrategy.value : 'work_shield',
         elasticityFactor: parseFloat(document.getElementById('elasticityFactor').value) / 100,
         movingAverageYears: parseInt(document.getElementById('movingAverageYears').value),
-        workShieldTrigger: parseFloat(document.getElementById('workShieldTrigger').value) / 100
+        workShieldTrigger: parseFloat(document.getElementById('workShieldTrigger').value) / 100,
+        failureCriteria: checkedFailureCriteria ? checkedFailureCriteria.value : 'preserve_real_value'
     };
 }

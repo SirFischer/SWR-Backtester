@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Retirement Strategy Backtester</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://d3js.org/d3.v7.min.js"></script>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
@@ -51,42 +52,97 @@
                     <div class="control-group">
                         <label for="initialPortfolio" class="block text-sm font-semibold text-gray-700 mb-3">Initial Portfolio</label>
                         <div class="flex items-center space-x-4">
-                            <input type="range" id="initialPortfolio" min="1000000" max="20000000" step="100000" value="10000000" class="w-full">
+                            <input type="range" id="initialPortfolio" min="1000000" max="20000000" step="100000" value="10000000" class="form-range w-full">
                             <input type="number" id="initialPortfolioValue" step="100000" value="10000000" class="slider-number-input">
                         </div>
                     </div>
                      <div id="withdrawal-rate-control" class="control-group">
                         <label for="withdrawalRate" class="block text-sm font-semibold text-gray-700 mb-3">Target Withdrawal Rate (%)</label>
                         <div class="flex items-center space-x-4">
-                            <input type="range" id="withdrawalRate" min="2" max="10" step="0.1" value="4.0" class="w-full">
+                            <input type="range" id="withdrawalRate" min="2" max="10" step="0.1" value="4.0" class="form-range w-full">
                              <input type="number" id="withdrawalRateValue" step="0.1" value="4.0" class="slider-number-input">
                         </div>
                     </div>
                     <div class="control-group">
                         <label for="retirementDuration" class="block text-sm font-semibold text-gray-700 mb-3">Retirement Duration (Years)</label>
                         <div class="flex items-center space-x-4">
-                            <input type="range" id="retirementDuration" min="10" max="60" step="1" value="30" class="w-full">
+                            <input type="range" id="retirementDuration" min="10" max="60" step="1" value="30" class="form-range w-full">
                             <input type="number" id="retirementDurationValue" step="1" value="30" class="slider-number-input">
+                        </div>
+                    </div>
+                    <div class="control-group">
+                        <label class="block text-sm font-semibold text-gray-700 mb-4">Failure Criteria</label>
+                        <div class="space-y-3">
+                            <div class="strategy-card">
+                                <div class="strategy-header">
+                                    <div class="strategy-main">
+                                        <input type="radio" name="failureCriteria" value="preserve_real_value" checked class="h-4 w-4 text-indigo-600 border-gray-300 focus:ring-indigo-500 flex-shrink-0 mt-1">
+                                        <div class="strategy-content">
+                                            <div class="strategy-title-row">
+                                                <label for="failure-preserve" class="strategy-name">
+                                                    Preserve Real Value
+                                                </label>
+                                                <span class="strategy-badge px-2 py-1 text-xs font-medium rounded-full bg-blue-100 text-blue-800">
+                                                    Conservative
+                                                </span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <button type="button" class="strategy-toggle" data-criteria="preserve">
+                                        <svg viewBox="0 0 20 20">
+                                            <path d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"/>
+                                        </svg>
+                                    </button>
+                                </div>
+                                <div class="strategy-description">
+                                    <p class="text-sm text-gray-600 leading-relaxed">Portfolio must be worth more than initial investment (inflation-adjusted). Ensures you don't lose purchasing power over retirement.</p>
+                                </div>
+                            </div>
+                            <div class="strategy-card">
+                                <div class="strategy-header">
+                                    <div class="strategy-main">
+                                        <input type="radio" name="failureCriteria" value="avoid_bankruptcy" class="h-4 w-4 text-indigo-600 border-gray-300 focus:ring-indigo-500 flex-shrink-0 mt-1">
+                                        <div class="strategy-content">
+                                            <div class="strategy-title-row">
+                                                <label for="failure-bankruptcy" class="strategy-name">
+                                                    Avoid Bankruptcy
+                                                </label>
+                                                <span class="strategy-badge px-2 py-1 text-xs font-medium rounded-full bg-green-100 text-green-800">
+                                                    Lenient
+                                                </span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <button type="button" class="strategy-toggle" data-criteria="bankruptcy">
+                                        <svg viewBox="0 0 20 20">
+                                            <path d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"/>
+                                        </svg>
+                                    </button>
+                                </div>
+                                <div class="strategy-description">
+                                    <p class="text-sm text-gray-600 leading-relaxed">Portfolio just needs to be above zero at the end. More lenient approach that focuses on avoiding complete depletion.</p>
+                                </div>
+                            </div>
                         </div>
                     </div>
                     <div id="elasticity-control" class="control-group hidden">
                         <label for="elasticityFactor" class="block text-sm font-semibold text-gray-700 mb-3">Max Annual Change (+/- %)</label>
                         <div class="flex items-center space-x-4">
-                            <input type="range" id="elasticityFactor" min="1" max="20" step="1" value="3" class="w-full">
+                            <input type="range" id="elasticityFactor" min="1" max="20" step="1" value="3" class="form-range w-full">
                              <input type="number" id="elasticityFactorValue" step="1" value="3" class="slider-number-input">
                         </div>
                     </div>
                     <div id="moving-average-control" class="control-group hidden">
                         <label for="movingAverageYears" class="block text-sm font-semibold text-gray-700 mb-3">Smoothing Period (Years)</label>
                         <div class="flex items-center space-x-4">
-                            <input type="range" id="movingAverageYears" min="1" max="10" step="1" value="3" class="w-full">
+                            <input type="range" id="movingAverageYears" min="1" max="10" step="1" value="3" class="form-range w-full">
                              <input type="number" id="movingAverageYearsValue" step="1" value="3" class="slider-number-input">
                         </div>
                     </div>
                     <div id="work-shield-control" class="control-group hidden">
                         <label for="workShieldTrigger" class="block text-sm font-semibold text-gray-700 mb-3">Work Shield Trigger (Market Drop > X%)</label>
                         <div class="flex items-center space-x-4">
-                            <input type="range" id="workShieldTrigger" min="10" max="40" step="1" value="20" class="w-full">
+                            <input type="range" id="workShieldTrigger" min="10" max="40" step="1" value="20" class="form-range w-full">
                              <input type="number" id="workShieldTriggerValue" step="1" value="20" class="slider-number-input">
                         </div>
                     </div>
@@ -110,7 +166,7 @@
                 </div>
                  <div id="failure-analysis" class="results-card glass-card p-8 rounded-2xl hidden">
                     <h3 class="text-2xl font-bold mb-6 text-red-600">Failure Analysis</h3>
-                    <p class="text-gray-600 leading-relaxed">A period fails if the portfolio runs out of money OR its inflation-adjusted value at the end of the period is less than the starting value.</p>
+                    <p id="failure-description" class="text-gray-600 leading-relaxed">A period fails if the portfolio runs out of money OR its inflation-adjusted value at the end of the period is less than the starting value.</p>
                     <p class="text-gray-600 mt-3 leading-relaxed">The following retirement start years would have resulted in portfolio failure:</p>
                     <div id="failure-years" class="mt-6 p-4 bg-red-50 rounded-lg font-mono text-red-600 text-lg border border-red-200"></div>
                 </div>

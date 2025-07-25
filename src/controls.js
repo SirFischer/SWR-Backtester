@@ -11,6 +11,9 @@ export function setupControls() {
 
     // Create enhanced strategy cards
     createStrategyCards();
+    
+    // Setup failure criteria cards
+    setupFailureCriteriaCards();
 
     // Strategy selector
     const strategyOptions = document.getElementById('strategy-options');
@@ -134,6 +137,48 @@ function updateStrategyCardSelection(selectedStrategy) {
     cards.forEach(card => {
         const radio = card.querySelector('input[type="radio"]');
         if (radio.value === selectedStrategy) {
+            card.classList.add('selected');
+        } else {
+            card.classList.remove('selected');
+        }
+    });
+}
+
+// Setup failure criteria cards with collapsible behavior
+function setupFailureCriteriaCards() {
+    const failureCriteriaCards = document.querySelectorAll('[name="failureCriteria"]').forEach(radio => {
+        const card = radio.closest('.strategy-card');
+        const toggleBtn = card.querySelector('.strategy-toggle');
+        
+        // Add click handler for the toggle button
+        toggleBtn.addEventListener('click', (e) => {
+            e.stopPropagation();
+            card.classList.toggle('expanded');
+        });
+
+        // Add click handler for the entire card (except toggle) to select radio
+        card.addEventListener('click', (e) => {
+            if (!e.target.closest('.strategy-toggle')) {
+                radio.checked = true;
+                radio.dispatchEvent(new Event('change', { bubbles: true }));
+                updateFailureCriteriaSelection(radio.value);
+            }
+        });
+        
+        // Add change listener to update selection styling
+        radio.addEventListener('change', () => {
+            if (radio.checked) {
+                updateFailureCriteriaSelection(radio.value);
+            }
+        });
+    });
+}
+
+// Update failure criteria card selection styling
+function updateFailureCriteriaSelection(selectedCriteria) {
+    const cards = document.querySelectorAll('[name="failureCriteria"]').forEach(radio => {
+        const card = radio.closest('.strategy-card');
+        if (radio.value === selectedCriteria) {
             card.classList.add('selected');
         } else {
             card.classList.remove('selected');

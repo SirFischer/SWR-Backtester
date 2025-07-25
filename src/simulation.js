@@ -65,7 +65,15 @@ export function runSingleSimulation(params, startYear) {
 
     const finalPortfolio = history[history.length - 1].portfolio;
     const finalRealValue = finalPortfolio / cumulativeInflation;
-    const success = finalPortfolio > 0 && finalRealValue >= params.initialPortfolio;
+    
+    // Determine success based on failure criteria
+    let success;
+    if (params.failureCriteria === 'avoid_bankruptcy') {
+        success = finalPortfolio > 0;
+    } else {
+        // Default: preserve_real_value
+        success = finalPortfolio > 0 && finalRealValue >= params.initialPortfolio;
+    }
 
     return { history: history, success: success, startYear: startYear, finalRealValue: finalRealValue, minRealPortfolio: minRealPortfolio };
 }

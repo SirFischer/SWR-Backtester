@@ -1,4 +1,4 @@
-import { domElements } from './dom-utils.js';
+import { domElements, getSimulationParams } from './dom-utils.js';
 
 // Display aggregate results from all simulations with enhanced styling
 export function displayAggregateResults(results) {
@@ -70,6 +70,15 @@ export function displayAggregateResults(results) {
     if (failedRuns.length > 0) {
         domElements.failureAnalysisDiv.classList.remove('hidden');
         domElements.failureYearsDiv.textContent = failedRuns.map(r => r.startYear).join(', ');
+        
+        // Update failure description based on current criteria
+        const params = getSimulationParams();
+        const failureDescription = document.getElementById('failure-description');
+        if (params.failureCriteria === 'avoid_bankruptcy') {
+            failureDescription.textContent = 'A period fails if the portfolio runs out of money (reaches zero).';
+        } else {
+            failureDescription.textContent = 'A period fails if the portfolio runs out of money OR its inflation-adjusted value at the end of the period is less than the starting value.';
+        }
     } else {
         domElements.failureAnalysisDiv.classList.add('hidden');
     }
