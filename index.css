@@ -172,11 +172,7 @@ body {
     transform: rotate(180deg);
 }
 
-/* Bootstrap slider - enhanced track visibility and purple thumb */
-.form-range {
-    --bs-form-range-track-bg: #dee2e6; /* Bootstrap $gray-300 equivalent for better visibility */
-}
-
+/* Bootstrap slider - enhanced track and thumb styling */
 .form-range::-webkit-slider-thumb {
     background: linear-gradient(135deg, #a855f7, #c084fc) !important;
     border: 2px solid #ffffff !important;
@@ -468,14 +464,4 @@ button:focus {
 
 ::-webkit-scrollbar-thumb:hover {
     background: linear-gradient(135deg, #3730a3, #5b21b6);
-}
-
-.tooltip-label {
-    cursor: help;
-    border-bottom: 1px dotted #9ca3af;
-    transition: border-color 0.2s;
-}
-
-.tooltip-label:hover {
-    border-color: #4f46e5;
 }
